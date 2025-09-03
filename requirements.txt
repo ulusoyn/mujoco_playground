@@ -1,0 +1,14 @@
+# MuJoCo Playground Dependencies
+# Core MuJoCo Python bindings
+mujoco>=3.3.0
+
+# Scientific computing and visualization
+numpy>=1.20.0
+
+# Optional: For advanced features
+# matplotlib>=3.5.0  # For plotting simulation data
+# scipy>=1.7.0      # For additional numerical tools
+
+
+
+

@@ -1,0 +1,309 @@
+<mujoco model="ackermann_maze_flat">
+
+  <compiler angle="degree"/>
+
+  <default>
+    <geom solref="0.01 1" solimp="0.95 0.98 0.002"/>
+  </default>
+  
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <asset>
+    <mesh name="Base" file="../CAD Models/Base.stl"/>
+  </asset>   
+  
+  <asset>
+    <mesh name="Ceiling" file="../CAD Models/Ceiling.stl"/>
+  </asset> 
+
+  
+  <worldbody>    
+    <light name="top" pos="0 0 3" dir="0 0 -1" diffuse=".6 .6 .6" specular="0.1 0.1 0.1"/>
+    <geom name="floor" pos="0 0 0" size="40 40 .1" type="plane" 
+      rgba="0.9 0.9 0.9 1" friction="1 0.005 0.0001"/>
+
+    <!-- Maze obstacles (from mobile-mujoco-environments/envs/assets/maze.xml) -->
+    <body name="obstacle_0">
+      <geom name="obstacle_0" type="box" size="0.5 0.5 0.1" pos="-4.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_1">
+      <geom name="obstacle_1" type="box" size="0.5 0.5 0.1" pos="-4.0 -3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_2">
+      <geom name="obstacle_2" type="box" size="0.5 0.5 0.1" pos="-4.0 -2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_3">
+      <geom name="obstacle_3" type="box" size="0.5 0.5 0.1" pos="-4.0 -1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_4">
+      <geom name="obstacle_4" type="box" size="0.5 0.5 0.1" pos="-4.0 0.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_5">
+      <geom name="obstacle_5" type="box" size="0.5 0.5 0.1" pos="-4.0 1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_6">
+      <geom name="obstacle_6" type="box" size="0.5 0.5 0.1" pos="-4.0 2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_7">
+      <geom name="obstacle_7" type="box" size="0.5 0.5 0.1" pos="-4.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_8">
+      <geom name="obstacle_8" type="box" size="0.5 0.5 0.1" pos="-3.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_9">
+      <geom name="obstacle_9" type="box" size="0.5 0.5 0.1" pos="-3.0 -1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_10">
+      <geom name="obstacle_10" type="box" size="0.5 0.5 0.1" pos="-3.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_11">
+      <geom name="obstacle_11" type="box" size="0.5 0.5 0.1" pos="-2.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_12">
+      <geom name="obstacle_12" type="box" size="0.5 0.5 0.1" pos="-2.0 -1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_13">
+      <geom name="obstacle_13" type="box" size="0.5 0.5 0.1" pos="-2.0 1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_14">
+      <geom name="obstacle_14" type="box" size="0.5 0.5 0.1" pos="-2.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_15">
+      <geom name="obstacle_15" type="box" size="0.5 0.5 0.1" pos="-1.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_16">
+      <geom name="obstacle_16" type="box" size="0.5 0.5 0.1" pos="-1.0 -3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_17">
+      <geom name="obstacle_17" type="box" size="0.5 0.5 0.1" pos="-1.0 2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_18">
+      <geom name="obstacle_18" type="box" size="0.5 0.5 0.1" pos="-1.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_19">
+      <geom name="obstacle_19" type="box" size="0.5 0.5 0.1" pos="0.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_20">
+      <geom name="obstacle_20" type="box" size="0.5 0.5 0.1" pos="0.0 -3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_21">
+      <geom name="obstacle_21" type="box" size="0.5 0.5 0.1" pos="0.0 -2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_22">
+      <geom name="obstacle_22" type="box" size="0.5 0.5 0.1" pos="0.0 0.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_23">
+      <geom name="obstacle_23" type="box" size="0.5 0.5 0.1" pos="0.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_24">
+      <geom name="obstacle_24" type="box" size="0.5 0.5 0.1" pos="1.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_25">
+      <geom name="obstacle_25" type="box" size="0.5 0.5 0.1" pos="1.0 1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_26">
+      <geom name="obstacle_26" type="box" size="0.5 0.5 0.1" pos="1.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_27">
+      <geom name="obstacle_27" type="box" size="0.5 0.5 0.1" pos="2.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_28">
+      <geom name="obstacle_28" type="box" size="0.5 0.5 0.1" pos="2.0 -1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_29">
+      <geom name="obstacle_29" type="box" size="0.5 0.5 0.1" pos="2.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_30">
+      <geom name="obstacle_30" type="box" size="0.5 0.5 0.1" pos="3.0 -4.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_31">
+      <geom name="obstacle_31" type="box" size="0.5 0.5 0.1" pos="3.0 -3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_32">
+      <geom name="obstacle_32" type="box" size="0.5 0.5 0.1" pos="3.0 -2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_33">
+      <geom name="obstacle_33" type="box" size="0.5 0.5 0.1" pos="3.0 -1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_34">
+      <geom name="obstacle_34" type="box" size="0.5 0.5 0.1" pos="3.0 0.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_35">
+      <geom name="obstacle_35" type="box" size="0.5 0.5 0.1" pos="3.0 1.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_36">
+      <geom name="obstacle_36" type="box" size="0.5 0.5 0.1" pos="3.0 2.0 0.05" rgba="1 0 0 1"/>
+    </body>
+    <body name="obstacle_37">
+      <geom name="obstacle_37" type="box" size="0.5 0.5 0.1" pos="3.0 3.0 0.05" rgba="1 0 0 1"/>
+    </body>
+
+    <!-- Ackermann robot (copied from models/ackermann_robot.xml) -->
+    <!-- Chassis box: length=0.275, width=0.15, height=0.1 -->
+    <!-- size uses half-dimensions -->
+    <body name="chassis" pos="-2.9 -3.3 0.09">
+      <freejoint/>
+
+      <body name="base">
+        <geom name="chassis" type="mesh" mesh="Base" euler="90 -90 0" pos="0 0 -0.03" mass="5"
+              conaffinity="0" contype="0" rgba="0.2 0.8 0.8 1"/>
+      </body>
+
+      <body name="ceiling">
+        <geom type="mesh" mesh="Ceiling" pos="0 0 -0.01" euler="90 -90 0"  mass="5"
+              conaffinity="0" contype="0" rgba="0.2 0.4 0.8 1"/>
+      </body>
+
+
+      <!-- Rear wheels (with encoders) at x=-0.12, y=±0.06, z=0.065; radius=0.065 -->
+      <body name="rear_left" pos="-0.10 0.087 -0.0325">
+        <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+        <geom name="rear_left_wheel_geom" type="cylinder" size="0.0325 0.01" 
+          euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"
+          friction="1.4 0.08 0.0015"/>
+        <joint name="rear_left_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+      </body>
+      <body name="rear_right" pos="-0.10 -0.087 -0.0325">
+        <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+        <geom name="rear_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
+          euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"
+          friction="1.4 0.08 0.0015"/>
+        <joint name="rear_right_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+      </body>
+      
+      <!-- Front wheels with steering at x=+0.12, y=±0.06, z=0.065; radius=0.065 -->
+      <body name="front_left_steer" pos="0.10 0.087 -0.0325">
+        <inertial pos="0 0 0" mass="0.1" diaginertia="1e-4 1e-4 1e-4"/>
+        <!-- Steering hinge about Z (controlled) -->
+        <joint name="front_left_steer" type="hinge" axis="0 0 1" range="-35 35" damping="0.25" frictionloss="0.005"/>
+        <body name="front_left" pos="0 0 0">
+          <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+          <geom name="front_left_wheel_geom" type="cylinder" size="0.0325 0.01" 
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+          <!-- Wheel spin hinge about Y (free) -->
+          <joint name="front_left_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+        </body>
+      </body>
+      <body name="front_right_steer" pos="0.10 -0.087 -0.0325">
+        <inertial pos="0 0 0" mass="0.1" diaginertia="1e-4 1e-4 1e-4"/>
+        <!-- Steering hinge about Z (controlled) -->
+        <joint name="front_right_steer" type="hinge" axis="0 0 1" range="-35 35" damping="0.25" frictionloss="0.005"/>
+        <body name="front_right" pos="0 0 0">
+          <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+          <geom name="front_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+          <!-- Wheel spin hinge about Y (free) -->
+          <joint name="front_right_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+        </body>
+      </body>
+
+      <!-- 360-degree lidar: mount near front center and spin 36 beams (10 deg spacing) -->
+      <body name="lidar_360" pos="0 0 0.035">
+        <!-- Orient each site using zaxis to define horizontal ray direction -->
+        <site name="lidar_360_s00" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="1 0 0"/>
+        <site name="lidar_360_s01" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.984807753 0.173648178 0"/>
+        <site name="lidar_360_s02" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.93969262 0.342020143 0"/>
+        <site name="lidar_360_s03" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.866025404 0.5 0"/>
+        <site name="lidar_360_s04" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.766044443 0.64278761 0"/>
+        <site name="lidar_360_s05" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.64278761 0.766044443 0"/>
+        <site name="lidar_360_s06" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.5 0.866025404 0"/>
+        <site name="lidar_360_s07" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.342020143 0.93969262 0"/>
+        <site name="lidar_360_s08" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.173648178 0.984807753 0"/>
+        <site name="lidar_360_s09" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0 1 0"/>
+        <site name="lidar_360_s10" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.173648178 0.984807753 0"/>
+        <site name="lidar_360_s11" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.342020143 0.93969262 0"/>
+        <site name="lidar_360_s12" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.5 0.866025404 0"/>
+        <site name="lidar_360_s13" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.64278761 0.766044443 0"/>
+        <site name="lidar_360_s14" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.766044443 0.64278761 0"/>
+        <site name="lidar_360_s15" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.866025404 0.5 0"/>
+        <site name="lidar_360_s16" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.93969262 0.342020143 0"/>
+        <site name="lidar_360_s17" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.984807753 0.173648178 0"/>
+        <site name="lidar_360_s18" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-1 0 0"/>
+        <site name="lidar_360_s19" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.984807753 -0.173648178 0"/>
+        <site name="lidar_360_s20" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.93969262 -0.342020143 0"/>
+        <site name="lidar_360_s21" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.866025404 -0.5 0"/>
+        <site name="lidar_360_s22" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.766044443 -0.64278761 0"/>
+        <site name="lidar_360_s23" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.64278761 -0.766044443 0"/>
+        <site name="lidar_360_s24" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.5 -0.866025404 0"/>
+        <site name="lidar_360_s25" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.342020143 -0.93969262 0"/>
+        <site name="lidar_360_s26" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="-0.173648178 -0.984807753 0"/>
+        <site name="lidar_360_s27" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0 -1 0"/>
+        <site name="lidar_360_s28" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.173648178 -0.984807753 0"/>
+        <site name="lidar_360_s29" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.342020143 -0.93969262 0"/>
+        <site name="lidar_360_s30" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.5 -0.866025404 0"/>
+        <site name="lidar_360_s31" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.64278761 -0.766044443 0"/>
+        <site name="lidar_360_s32" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.766044443 -0.64278761 0"/>
+        <site name="lidar_360_s33" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.866025404 -0.5 0"/>
+        <site name="lidar_360_s34" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.93969262 -0.342020143 0"/>
+        <site name="lidar_360_s35" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" zaxis="0.984807753 -0.173648178 0"/>
+      </body>
+
+    </body>
+  </worldbody>
+  
+  <sensor>
+    <!-- Encoders for rear wheel rotation -->
+    <jointpos name="rear_left_encoder" joint="rear_left_wheel"/>
+    <jointpos name="rear_right_encoder" joint="rear_right_wheel"/>
+    
+    <!-- Optional: expose front steering angles and wheel spins too -->
+    <jointpos name="front_left_steer_angle" joint="front_left_steer"/>
+    <jointpos name="front_right_steer_angle" joint="front_right_steer"/>
+    <jointpos name="front_left_wheel_pos" joint="front_left_wheel"/>
+    <jointpos name="front_right_wheel_pos" joint="front_right_wheel"/>
+    
+    <!-- 360-degree lidar rangefinders for each site -->
+    <rangefinder name="rf_360_s00" site="lidar_360_s00"/>
+    <rangefinder name="rf_360_s01" site="lidar_360_s01"/>
+    <rangefinder name="rf_360_s02" site="lidar_360_s02"/>
+    <rangefinder name="rf_360_s03" site="lidar_360_s03"/>
+    <rangefinder name="rf_360_s04" site="lidar_360_s04"/>
+    <rangefinder name="rf_360_s05" site="lidar_360_s05"/>
+    <rangefinder name="rf_360_s06" site="lidar_360_s06"/>
+    <rangefinder name="rf_360_s07" site="lidar_360_s07"/>
+    <rangefinder name="rf_360_s08" site="lidar_360_s08"/>
+    <rangefinder name="rf_360_s09" site="lidar_360_s09"/>
+    <rangefinder name="rf_360_s10" site="lidar_360_s10"/>
+    <rangefinder name="rf_360_s11" site="lidar_360_s11"/>
+    <rangefinder name="rf_360_s12" site="lidar_360_s12"/>
+    <rangefinder name="rf_360_s13" site="lidar_360_s13"/>
+    <rangefinder name="rf_360_s14" site="lidar_360_s14"/>
+    <rangefinder name="rf_360_s15" site="lidar_360_s15"/>
+    <rangefinder name="rf_360_s16" site="lidar_360_s16"/>
+    <rangefinder name="rf_360_s17" site="lidar_360_s17"/>
+    <rangefinder name="rf_360_s18" site="lidar_360_s18"/>
+    <rangefinder name="rf_360_s19" site="lidar_360_s19"/>
+    <rangefinder name="rf_360_s20" site="lidar_360_s20"/>
+    <rangefinder name="rf_360_s21" site="lidar_360_s21"/>
+    <rangefinder name="rf_360_s22" site="lidar_360_s22"/>
+    <rangefinder name="rf_360_s23" site="lidar_360_s23"/>
+    <rangefinder name="rf_360_s24" site="lidar_360_s24"/>
+    <rangefinder name="rf_360_s25" site="lidar_360_s25"/>
+    <rangefinder name="rf_360_s26" site="lidar_360_s26"/>
+    <rangefinder name="rf_360_s27" site="lidar_360_s27"/>
+    <rangefinder name="rf_360_s28" site="lidar_360_s28"/>
+    <rangefinder name="rf_360_s29" site="lidar_360_s29"/>
+    <rangefinder name="rf_360_s30" site="lidar_360_s30"/>
+    <rangefinder name="rf_360_s31" site="lidar_360_s31"/>
+    <rangefinder name="rf_360_s32" site="lidar_360_s32"/>
+    <rangefinder name="rf_360_s33" site="lidar_360_s33"/>
+    <rangefinder name="rf_360_s34" site="lidar_360_s34"/>
+    <rangefinder name="rf_360_s35" site="lidar_360_s35"/>
+  </sensor>
+  
+  <!-- Removed equality coupling; left and right steering are controlled independently -->
+
+  <actuator>
+    <!-- Steering: keep position actuator -->
+    <position name="front_steer_left" joint="front_left_steer" kp="30" kv="4" forcerange="-10 10"/>
+    <position name="front_steer_right" joint="front_right_steer" kp="30" kv="4" forcerange="-10 10"/>
+
+    <!-- Rear wheel torque actuators (instead of velocity control) -->
+    <motor name="rear_left_drive" joint="rear_left_wheel" forcerange="-2 2"/>
+    <motor name="rear_right_drive" joint="rear_right_wheel" forcerange="-2 2"/>
+  </actuator>
+
+</mujoco>
+
+
+

@@ -1,0 +1,9 @@
+<mujoco model="ackermann_in_maze">
+  <compiler angle="degree"/>
+  <size njmax="2000" nconmax="500"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <!-- Use flattened scene that already places the robot in free space -->
+  <include file="ackermann_maze_flat.xml"/>
+
+</mujoco>
