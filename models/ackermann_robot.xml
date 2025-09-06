@@ -175,13 +175,20 @@
   <!-- Removed equality coupling; left and right steering are controlled independently -->
 
   <actuator>
-    <!-- Steering: keep position actuator -->
-    <position name="front_steer_left" joint="front_left_steer" kp="30" kv="4" forcerange="-10 10"/>
-    <position name="front_steer_right" joint="front_right_steer" kp="30" kv="4" forcerange="-10 10"/>
+    <!-- Steering actuators: position-controlled with limits -->
+    <position name="front_steer_left" joint="front_left_steer"
+              kp="30" kv="4" forcerange="-1 1"
+              ctrlrange="-0.50 0.50"/> <!-- ±35° in radians -->
 
-    <!-- Rear wheel torque actuators (instead of velocity control) -->
-    <motor name="rear_left_drive" joint="rear_left_wheel" forcerange="-0.3 0.3"/>
-    <motor name="rear_right_drive" joint="rear_right_wheel" forcerange="-0.3 0.3"/>
+    <position name="front_steer_right" joint="front_right_steer"
+              kp="30" kv="4" forcerange="-1 1"
+              ctrlrange="-0.50 0.50"/> <!-- ±35° in radians -->
+
+    <!-- Rear wheel torque actuators -->
+    <velocity name="rear_left_drive" joint="rear_left_wheel" kv="1" ctrlrange="-50 50"/>
+    <velocity name="rear_right_drive" joint="rear_right_wheel" kv="1" ctrlrange="-50 50"/>
+
   </actuator>
+
 
 </mujoco>
