@@ -82,7 +82,6 @@ class AckermannController:
         return delta_left, delta_right, w_left, w_right
 
 
-
     def apply_cmd_vel(self, linear_x, angular_z):
         delta_left, delta_right, w_left, w_right = self.cmd_vel_to_controls(linear_x, angular_z)
 
