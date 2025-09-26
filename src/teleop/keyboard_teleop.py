@@ -12,18 +12,17 @@ class MujocoTeleop:
         self.angular_limit = angular_limit
 
     def key_callback(self, keycode):
-    
 
         # Forward / backward
-        if keycode == glfw.KEY_KP_8:
+        if keycode in (glfw.KEY_KP_8, glfw.KEY_UP):
             self.cmd_vel["linear_x"] += self.linear_increment
-        elif keycode == glfw.KEY_KP_2:
+        elif keycode in (glfw.KEY_KP_2, glfw.KEY_DOWN):
             self.cmd_vel["linear_x"] -= self.linear_increment
 
         # Left / right
-        elif keycode == glfw.KEY_KP_4:
+        elif keycode in (glfw.KEY_KP_4, glfw.KEY_LEFT):
             self.cmd_vel["angular_z"] += self.angular_increment
-        elif keycode == glfw.KEY_KP_6:
+        elif keycode in (glfw.KEY_KP_6, glfw.KEY_RIGHT):
             self.cmd_vel["angular_z"] -= self.angular_increment
 
         # Diagonals

@@ -59,7 +59,8 @@
         <body name="front_left" pos="0 0 0">
           <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
           <geom name="front_left_wheel_geom" type="cylinder" size="0.0325 0.01" 
-            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"
+            friction="1.4 0.08 0.0015"/>
           <!-- Wheel spin hinge about Y (free) -->
           <joint name="front_left_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
         </body>
@@ -71,7 +72,8 @@
         <body name="front_right" pos="0 0 0">
           <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
           <geom name="front_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
-            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"
+            friction="1.4 0.08 0.0015"/>
           <!-- Wheel spin hinge about Y (free) -->
           <joint name="front_right_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
         </body>
@@ -178,11 +180,11 @@
     <!-- Steering actuators: position-controlled with limits -->
     <position name="front_steer_left" joint="front_left_steer"
               kp="30" kv="4" forcerange="-1 1"
-              ctrlrange="-0.50 0.50"/> <!-- ±35° in radians -->
+              ctrlrange="-0.61 0.61"/> <!-- match joint ±35° (0.611 rad) -->
 
     <position name="front_steer_right" joint="front_right_steer"
               kp="30" kv="4" forcerange="-1 1"
-              ctrlrange="-0.50 0.50"/> <!-- ±35° in radians -->
+              ctrlrange="-0.61 0.61"/> <!-- match joint ±35° (0.611 rad) -->
 
     <!-- Rear wheel torque actuators -->
     <velocity name="rear_left_drive" joint="rear_left_wheel" kv="1" ctrlrange="-50 50"/>

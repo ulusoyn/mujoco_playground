@@ -6,13 +6,16 @@ import time
 import sys
 from pathlib import Path
 
-# Add project root to path
+# Add project root and src to path
 _current_dir = Path(__file__).resolve().parent
 _project_root = _current_dir.parent.parent
+_src_dir = _current_dir.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
+if str(_src_dir) not in sys.path:
+    sys.path.insert(0, str(_src_dir))
 
-from cmd_vel_message import Twist, cmd_vel_publisher
+from core.cmd_vel_message import Twist, cmd_vel_publisher
 
 try:
     import pygame
@@ -33,8 +36,17 @@ class JoystickTeleop:
         
         # Joystick configuration
         self.joystick = None
-        self.axis_linear = 1   # Usually left stick vertical (forward/backward)
-        self.axis_angular = 0  # Usually left stick horizontal (left/right)
+        
+        # Axis mapping for Xbox One controller
+        self.axis_left_x = 0      # Left stick horizontal (left/right)
+        self.axis_left_y = 1      # Left stick vertical (forward/backward)
+        self.axis_right_x = 2     # Right stick horizontal (rotation left/right)
+        self.axis_right_y = 3     # Right stick vertical (not used)
+        
+        # Button configuration for Xbox One controller
+        # Based on our test: A=0, B=1, X=2, Y=3, LB=4, RB=5, Back=6, Start=7, etc.
+        self.button_safety = 5    # RB button - must be pressed to allow movement  
+        self.button_emergency = 6 # Back button - emergency stop
         
         # Publishing
         self.publish_rate = 20  # Hz
@@ -70,9 +82,12 @@ class JoystickTeleop:
         print(f"Number of axes: {self.joystick.get_numaxes()}")
         print(f"Number of buttons: {self.joystick.get_numbuttons()}")
         print("Controls:")
-        print(f"  Left stick vertical (axis {self.axis_linear}): Linear velocity")
-        print(f"  Left stick horizontal (axis {self.axis_angular}): Angular velocity") 
-        print("  Any button: Emergency stop")
+        print(f"  Left stick (axis {self.axis_left_x},{self.axis_left_y}): Linear movement (forward/back, left/right)")
+        print(f"  Right stick (axis {self.axis_right_x}): Rotation (left/right)")
+        print("  Safety:")
+        print(f"    RB (button {self.button_safety}): HOLD to enable movement")
+        print(f"    Back (button {self.button_emergency}): Emergency stop")
+        print("  IMPORTANT: Robot only moves when RB is pressed!")
         print("-" * 50)
         
         # Start publisher thread
@@ -100,35 +115,78 @@ class JoystickTeleop:
         """Main joystick reading loop"""
         clock = pygame.time.Clock()
         emergency_stop = False
+        safety_enabled = False
         
         print("Joystick ready. Press Ctrl+C to quit.")
+        print("Hold RB to enable movement, use Back button for emergency stop.")
+        print("Starting joystick input loop...")
         
         while self.running:
             # Process pygame events
             for event in pygame.event.get():
                 if event.type == pygame.JOYBUTTONDOWN:
-                    print(f"Button {event.button} pressed - Emergency stop activated!")
-                    emergency_stop = True
+                    if event.button == self.button_safety:
+                        safety_enabled = True
+                        print("RB pressed - Movement ENABLED")
+                    elif event.button == self.button_emergency:
+                        emergency_stop = True
+                        print("Back button pressed - Emergency stop activated!")
+                    else:
+                        print(f"Button {event.button} pressed")
                 elif event.type == pygame.JOYBUTTONUP:
-                    print(f"Button {event.button} released - Emergency stop deactivated")
-                    emergency_stop = False
+                    if event.button == self.button_safety:
+                        safety_enabled = False
+                        print("RB released - Movement DISABLED")
+                    elif event.button == self.button_emergency:
+                        emergency_stop = False
+                        print("Back button released - Emergency stop deactivated")
+                    else:
+                        print(f"Button {event.button} released")
                 elif event.type == pygame.QUIT:
                     self.running = False
             
-            # Read joystick axes
+            # Read joystick input
             if not emergency_stop and self.joystick:
                 try:
                     # Get axis values (-1.0 to 1.0)
-                    raw_linear = -self.joystick.get_axis(self.axis_linear)  # Invert for intuitive control
-                    raw_angular = -self.joystick.get_axis(self.axis_angular)  # Invert for intuitive control
+                    # Left stick: linear movement
+                    raw_left_x = self.joystick.get_axis(self.axis_left_x)   # Left/right
+                    raw_left_y = -self.joystick.get_axis(self.axis_left_y)  # Forward/back (inverted)
+                    
+                    # Right stick: rotation
+                    raw_right_x = self.joystick.get_axis(self.axis_right_x)  # Left/right rotation
                     
                     # Apply deadzone
-                    linear_vel = self._apply_deadzone(raw_linear) * self.max_linear_vel
-                    angular_vel = self._apply_deadzone(raw_angular) * self.max_angular_vel
+                    left_x = self._apply_deadzone(raw_left_x)
+                    left_y = self._apply_deadzone(raw_left_y)
+                    right_x = self._apply_deadzone(raw_right_x)
+                    
+                    # Convert to robot commands
+                    # For Ackermann robot, we use:
+                    # - linear_x: forward/backward speed
+                    # - angular_z: rotation speed
+                    
+                    linear_x = left_y * self.max_linear_vel  # Forward/backward
+                    angular_z = right_x * self.max_angular_vel  # Rotation
+                    
+                    # Apply safety button - only move if R1 is pressed
+                    if not safety_enabled:
+                        linear_x = 0.0
+                        angular_z = 0.0
                     
                     # Store current velocities for publisher thread
-                    self.current_linear_vel = linear_vel
-                    self.current_angular_vel = angular_vel
+                    self.current_linear_vel = linear_x
+                    self.current_angular_vel = angular_z
+                    
+                    # Debug output - show raw values and processed values
+                    # Show all input, even small values
+                    if abs(raw_left_y) > 0.001 or abs(raw_right_x) > 0.001:
+                        print(f"Raw: left_y={raw_left_y:.3f}, right_x={raw_right_x:.3f}")
+                        print(f"Processed: linear={linear_x:.3f}, angular={angular_z:.3f}, safety={safety_enabled}")
+                    
+                    # Also show if safety button is pressed
+                    if safety_enabled and (abs(raw_left_y) > 0.001 or abs(raw_right_x) > 0.001):
+                        print(f"SAFETY ENABLED: RB pressed, processing input")
                     
                 except pygame.error as e:
                     print(f"Joystick error: {e}")
@@ -154,6 +212,9 @@ class JoystickTeleop:
         """Publish cmd_vel message"""
         twist_msg = Twist(linear_x=linear_x, angular_z=angular_z)
         cmd_vel_publisher.publish(twist_msg)
+        # Debug: show what we're publishing
+        if abs(linear_x) > 0.01 or abs(angular_z) > 0.01:
+            print(f"PUBLISHING: linear={linear_x:.3f}, angular={angular_z:.3f}")
     
     def _publisher_loop(self):
         """Main publisher loop"""
@@ -161,7 +222,13 @@ class JoystickTeleop:
         self.current_linear_vel = 0.0
         self.current_angular_vel = 0.0
         
+        print(f"Publisher loop started, rate: {self.publish_rate} Hz")
+        
         while self.running:
+            # Debug: show what we're about to publish
+            if abs(self.current_linear_vel) > 0.01 or abs(self.current_angular_vel) > 0.01:
+                print(f"Publisher loop: linear={self.current_linear_vel:.3f}, angular={self.current_angular_vel:.3f}")
+            
             self._publish_cmd_vel(self.current_linear_vel, self.current_angular_vel)
             time.sleep(rate)
 
