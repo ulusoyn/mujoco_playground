@@ -13,7 +13,7 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 import mujoco
-from cmd_vel_message import cmd_vel_publisher
+from core.cmd_vel_message import cmd_vel_publisher
 from ackermann_cmd_vel_controller import AckermannCmdVelController, AckermannParams
 
 
@@ -234,7 +234,7 @@ def main():
         print("\nBridge test stopped.")
     
     # Send stop command
-    from cmd_vel_message import Twist
+    from core.cmd_vel_message import Twist
     cmd_vel_publisher.publish(Twist())
 
 
