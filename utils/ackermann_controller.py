@@ -116,24 +116,18 @@ class AckermannController:
         w_left_target = v_left / p.wheel_radius_m
         w_right_target = v_right / p.wheel_radius_m
 
-        # Measure current wheel angular velocities
-        w_left = float(self.data.qvel[self.qvel_adr_left])
-        w_right = float(self.data.qvel[self.qvel_adr_right])
+        # Command wheel angular velocities directly to velocity actuators
+        # (these actuators interpret ctrl as desired qvel)
+        try:
+            ctrl_min_l = float(self.model.actuator_ctrlrange[self.act_id_left][0])
+            ctrl_max_l = float(self.model.actuator_ctrlrange[self.act_id_left][1])
+            ctrl_min_r = float(self.model.actuator_ctrlrange[self.act_id_right][0])
+            ctrl_max_r = float(self.model.actuator_ctrlrange[self.act_id_right][1])
+        except Exception:
+            ctrl_min_l = -50.0
+            ctrl_max_l = 50.0
+            ctrl_min_r = -50.0
+            ctrl_max_r = 50.0
 
-        # PI control to motor torques
-        err_l = w_left_target - w_left
-        err_r = w_right_target - w_right
-        if abs(self._velocity_cmd_filt) < 1e-3 and abs(err_l) < 0.5 and abs(err_r) < 0.5:
-            self._integ_left = 0.0
-            self._integ_right = 0.0
-            tau_l = 0.0
-            tau_r = 0.0
-        else:
-            self._integ_left = float(np.clip(self._integ_left + err_l * dt, -2.0, 2.0))
-            self._integ_right = float(np.clip(self._integ_right + err_r * dt, -2.0, 2.0))
-            tau_l = p.kp_w * err_l + p.ki_w * self._integ_left
-            tau_r = p.kp_w * err_r + p.ki_w * self._integ_right
-
-        limit = float(p.torque_limit)
-        self.data.ctrl[self.act_id_left] = float(np.clip(tau_l, -limit, limit))
-        self.data.ctrl[self.act_id_right] = float(np.clip(tau_r, -limit, limit))
+        self.data.ctrl[self.act_id_left] = float(np.clip(w_left_target, ctrl_min_l, ctrl_max_l))
+        self.data.ctrl[self.act_id_right] = float(np.clip(w_right_target, ctrl_min_r, ctrl_max_r))

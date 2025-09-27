@@ -10,3 +10,7 @@ keyboard>=0.13.5       # For keyboard control (requires root/admin on some syste
 
 # Development/visualization (if needed)
 matplotlib>=3.5.0      # For plotting robot trajectories
+
+
+
+

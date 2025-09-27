@@ -20,7 +20,7 @@ class PID:
 
 class AckermannController:
     def __init__(self, model, data,
-                 wheel_radius=0.065, wheelbase=0.20, track_width=0.174):
+                 wheel_radius=0.0325, wheelbase=0.20, track_width=0.174):
         """
         model, data: MuJoCo model and data objects
         wheel_radius: wheel radius in meters
@@ -49,47 +49,78 @@ class AckermannController:
         self.pid_right = PID(kp=2.0, ki=0.1, kd=0.05, dt=dt)
 
     def cmd_vel_to_controls(self, linear_x, angular_z):
-        if abs(linear_x) < 1e-5 and abs(angular_z) < 1e-5:
-            return 0.0, 0.0, 0.0, 0.0
+        v_cmd = float(linear_x)
+        yaw_rate = float(angular_z)
 
-        if abs(angular_z) < 1e-4:
-            delta_left = delta_right = 0.0
-            v_left = v_right = linear_x
+        # If no yaw, go straight
+        if abs(yaw_rate) < 1e-6:
+            delta_left = 0.0
+            delta_right = 0.0
+            v_left = v_cmd
+            v_right = v_cmd
         else:
-            R = linear_x / angular_z  # turning radius (signed)
+            # Bicycle steering from v and yaw_rate: tan(delta) = wb * yaw_rate / v
+            # Avoid division blowups at low speeds
+            eps_v = 1e-5
+            ratio = (self.wheelbase * yaw_rate) / (v_cmd if abs(v_cmd) > eps_v else np.sign(yaw_rate) * eps_v)
+            delta_bicycle = float(np.arctan(ratio))
 
-            # steering angles
-            delta_left = np.arctan2(self.wheelbase, R - (self.track_width / 2))
-            delta_right = np.arctan2(self.wheelbase, R + (self.track_width / 2))
+            # Clamp to actuator ctrlrange (±0.5 rad) for stability
+            delta_max = 0.5
+            delta_bicycle = float(np.clip(delta_bicycle, -delta_max, delta_max))
 
-            # rear wheel linear velocities
-            v_left = angular_z * (R - self.track_width / 2)
-            v_right = angular_z * (R + self.track_width / 2)
+            # Derive Ackermann inner/outer angles from clamped bicycle delta
+            R = self.wheelbase / np.tan(delta_bicycle)
+            R_abs = abs(R)
+            inner_R = max(R_abs - 0.5 * self.track_width, 1e-6)
+            outer_R = R_abs + 0.5 * self.track_width
+            inner_mag = float(np.arctan(self.wheelbase / inner_R))
+            outer_mag = float(np.arctan(self.wheelbase / outer_R))
+            if yaw_rate >= 0.0:  # left turn
+                delta_left = +inner_mag
+                delta_right = +outer_mag
+            else:  # right turn
+                delta_left = -outer_mag
+                delta_right = -inner_mag
 
-        if angular_z < -1e-4 and abs(angular_z) > 1e-4:
-            v_left = -v_left
-            v_right = -v_right
+            # Wheel linear speeds scaled from commanded linear speed
+            scale_inner = inner_R / R_abs
+            scale_outer = outer_R / R_abs
+            if yaw_rate >= 0.0:  # left turn
+                v_left = v_cmd * scale_inner
+                v_right = v_cmd * scale_outer
+            else:  # right turn
+                v_left = v_cmd * scale_outer
+                v_right = v_cmd * scale_inner
 
-        # Convert to wheel angular velocities
+        # Convert linear wheel speeds to angular wheel speeds
         w_left = v_left / self.wheel_radius
         w_right = v_right / self.wheel_radius
 
-        # Clip steering angles to joint limits
-        max_steer = np.deg2rad(35)
-        delta_left = np.clip(delta_left, -max_steer, max_steer)
-        delta_right = np.clip(delta_right, -max_steer, max_steer)
+        # Clip steering to physical joint limits
+        max_steer = float(np.deg2rad(35.0))
+        delta_left = float(np.clip(delta_left, -max_steer, max_steer))
+        delta_right = float(np.clip(delta_right, -max_steer, max_steer))
 
-        return delta_left, delta_right, w_left, w_right
-
+        return float(delta_left), float(delta_right), float(w_left), float(w_right)
 
     def apply_cmd_vel(self, linear_x, angular_z):
         delta_left, delta_right, w_left, w_right = self.cmd_vel_to_controls(linear_x, angular_z)
 
-        # Steering (position actuators expect radians)
-        self.data.ctrl[self.act_steer_left] = delta_left
-        self.data.ctrl[self.act_steer_right] = delta_right
+        # Clamp to actuator ctrlranges for safety
+        try:
+            steer_min_l, steer_max_l = self.model.actuator_ctrlrange[self.act_steer_left]
+            steer_min_r, steer_max_r = self.model.actuator_ctrlrange[self.act_steer_right]
+            vel_min_l, vel_max_l = self.model.actuator_ctrlrange[self.act_rear_left]
+            vel_min_r, vel_max_r = self.model.actuator_ctrlrange[self.act_rear_right]
+        except Exception:
+            steer_min_l = steer_min_r = -0.5
+            steer_max_l = steer_max_r = 0.5
+            vel_min_l = vel_min_r = -50.0
+            vel_max_l = vel_max_r = 50.0
 
-        # Send wheel angular velocities directly to velocity actuators
-        self.data.ctrl[self.act_rear_left] = w_left
-        self.data.ctrl[self.act_rear_right] = w_right
+        self.data.ctrl[self.act_steer_left] = float(np.clip(delta_left, steer_min_l, steer_max_l))
+        self.data.ctrl[self.act_steer_right] = float(np.clip(delta_right, steer_min_r, steer_max_r))
+        self.data.ctrl[self.act_rear_left] = float(np.clip(w_left, vel_min_l, vel_max_l))
+        self.data.ctrl[self.act_rear_right] = float(np.clip(w_right, vel_min_r, vel_max_r))
 
