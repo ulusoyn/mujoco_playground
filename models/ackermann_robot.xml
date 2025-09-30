@@ -15,10 +15,34 @@
 
   
   <worldbody>    
+
     <light name="top" pos="0 0 3" dir="0 0 -1" diffuse=".6 .6 .6" specular="0.1 0.1 0.1"/>
     <geom name="floor" pos="0 0 0" size="40 40 .1" type="plane" 
       rgba="0.9 0.9 0.9 1" friction="1 0.005 0.0001"/>
     
+    <!-- Add inside <worldbody> -->
+    <body name="obstacle_box" pos="0.5 0 0.05"> <!-- 0.5 m in front of robot -->
+      <geom name="box_geom" type="box" size="0.1 0.1 0.05" rgba="0.9 0.3 0.3 1"
+            contype="1" conaffinity="1"/>
+    </body>
+
+    <body name="obstacle_box2" pos="0 0.5 0.05"> <!-- 0.5 m in front of robot -->
+      <geom name="box_geom2" type="box" size="0.1 0.1 0.05" rgba="0.9 0.3 0.3 1"
+            contype="1" conaffinity="1"/>
+    </body>
+      
+    <body name="obstacle_box3" pos="0 -0.5 0.05"> <!-- 0.5 m in front of robot -->
+      <geom name="box_geom3" type="box" size="0.1 0.1 0.05" rgba="0.9 0.3 0.3 1"
+            contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Add inside <worldbody> -->
+    <body name="obstacle_box1" pos="-0.5 0 0.05"> <!-- 0.5 m in front of robot -->
+      <geom name="box_geom1" type="box" size="0.1 0.1 0.05" rgba="0.9 0.3 0.3 1"
+            contype="1" conaffinity="1"/>
+    </body>
+
+
     <!-- Chassis box: length=0.275, width=0.15, height=0.1 -->
     <!-- size uses half-dimensions -->
     <body name="chassis" pos="0 0 0.065">
@@ -80,46 +104,82 @@
       </body>
 
 
-      <!-- 360-degree lidar: mount near front center and spin 36 beams (10 deg spacing) -->
+      <!-- 360-degree lidar: 72 beams, 5° spacing, radius 0.035 m -->
       <body name="lidar_360" pos="0 0 0.035">
-        <!-- Each site casts along its -Z axis; euler z rotates beam around vertical -->
-        <site name="lidar_360_s00" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 0"/>
-        <site name="lidar_360_s01" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 10"/>
-        <site name="lidar_360_s02" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 20"/>
-        <site name="lidar_360_s03" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 30"/>
-        <site name="lidar_360_s04" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 40"/>
-        <site name="lidar_360_s05" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 50"/>
-        <site name="lidar_360_s06" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 60"/>
-        <site name="lidar_360_s07" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 70"/>
-        <site name="lidar_360_s08" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 80"/>
-        <site name="lidar_360_s09" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 90"/>
-        <site name="lidar_360_s10" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 100"/>
-        <site name="lidar_360_s11" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 110"/>
-        <site name="lidar_360_s12" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 120"/>
-        <site name="lidar_360_s13" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 130"/>
-        <site name="lidar_360_s14" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 140"/>
-        <site name="lidar_360_s15" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 150"/>
-        <site name="lidar_360_s16" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 160"/>
-        <site name="lidar_360_s17" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 170"/>
-        <site name="lidar_360_s18" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 180"/>
-        <site name="lidar_360_s19" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 190"/>
-        <site name="lidar_360_s20" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 200"/>
-        <site name="lidar_360_s21" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 210"/>
-        <site name="lidar_360_s22" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 220"/>
-        <site name="lidar_360_s23" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 230"/>
-        <site name="lidar_360_s24" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 240"/>
-        <site name="lidar_360_s25" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 250"/>
-        <site name="lidar_360_s26" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 260"/>
-        <site name="lidar_360_s27" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 270"/>
-        <site name="lidar_360_s28" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 280"/>
-        <site name="lidar_360_s29" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 290"/>
-        <site name="lidar_360_s30" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 300"/>
-        <site name="lidar_360_s31" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 310"/>
-        <site name="lidar_360_s32" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 320"/>
-        <site name="lidar_360_s33" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 330"/>
-        <site name="lidar_360_s34" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 340"/>
-        <site name="lidar_360_s35" pos="0 0 0" size="0.003" type="sphere" rgba="0.9 0.2 0.2 1" euler="0 90 350"/>
+        <site name="lidar_360_s00" pos="0.035000 0.000000 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-1.000000 0.000000 0"/>
+        <site name="lidar_360_s01" pos="0.034867 0.003051 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.996195 -0.087156 0"/>
+        <site name="lidar_360_s02" pos="0.034468 0.006077 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.984807 -0.173648 0"/>
+        <site name="lidar_360_s03" pos="0.033807 0.009059 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.965926 -0.258819 0"/>
+        <site name="lidar_360_s04" pos="0.032889 0.011971 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.939693 -0.342020 0"/>
+        <site name="lidar_360_s05" pos="0.031721 0.014792 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.906308 -0.422618 0"/>
+        <site name="lidar_360_s06" pos="0.030311 0.017500 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.866025 -0.500000 0"/>
+        <site name="lidar_360_s07" pos="0.028670 0.020075 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.819152 -0.573576 0"/>
+        <site name="lidar_360_s08" pos="0.026811 0.022497 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.766044 -0.642788 0"/>
+        <site name="lidar_360_s09" pos="0.024749 0.024749 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.707107 -0.707107 0"/>
+        <site name="lidar_360_s10" pos="0.022497 0.026811 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.642788 -0.766044 0"/>
+        <site name="lidar_360_s11" pos="0.020075 0.028670 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.573576 -0.819152 0"/>
+        <site name="lidar_360_s12" pos="0.017500 0.030311 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.500000 -0.866025 0"/>
+        <site name="lidar_360_s13" pos="0.014792 0.031721 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.422618 -0.906308 0"/>
+        <site name="lidar_360_s14" pos="0.011971 0.032889 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.342020 -0.939693 0"/>
+        <site name="lidar_360_s15" pos="0.009059 0.033807 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.258819 -0.965926 0"/>
+        <site name="lidar_360_s16" pos="0.006077 0.034468 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.173648 -0.984807 0"/>
+        <site name="lidar_360_s17" pos="0.003051 0.034867 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.087156 -0.996195 0"/>
+        <site name="lidar_360_s18" pos="0.000000 0.035000 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.000000 -1.000000 0"/>
+        <site name="lidar_360_s19" pos="-0.003051 0.034867 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.087156 -0.996195 0"/>
+        <site name="lidar_360_s20" pos="-0.006077 0.034468 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.173648 -0.984807 0"/>
+        <site name="lidar_360_s21" pos="-0.009059 0.033807 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.258819 -0.965926 0"/>
+        <site name="lidar_360_s22" pos="-0.011971 0.032889 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.342020 -0.939693 0"/>
+        <site name="lidar_360_s23" pos="-0.014792 0.031721 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.422618 -0.906308 0"/>
+        <site name="lidar_360_s24" pos="-0.017500 0.030311 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.500000 -0.866025 0"/>
+        <site name="lidar_360_s25" pos="-0.020075 0.028670 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.573576 -0.819152 0"/>
+        <site name="lidar_360_s26" pos="-0.022497 0.026811 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.642788 -0.766044 0"/>
+        <site name="lidar_360_s27" pos="-0.024749 0.024749 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.707107 -0.707107 0"/>
+        <site name="lidar_360_s28" pos="-0.026811 0.022497 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.766044 -0.642788 0"/>
+        <site name="lidar_360_s29" pos="-0.028670 0.020075 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.819152 -0.573576 0"/>
+        <site name="lidar_360_s30" pos="-0.030311 0.017500 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.866025 -0.500000 0"/>
+        <site name="lidar_360_s31" pos="-0.031721 0.014792 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.906308 -0.422618 0"/>
+        <site name="lidar_360_s32" pos="-0.032889 0.011971 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.939693 -0.342020 0"/>
+        <site name="lidar_360_s33" pos="-0.033807 0.009059 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.965926 -0.258819 0"/>
+        <site name="lidar_360_s34" pos="-0.034468 0.006077 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.984807 -0.173648 0"/>
+        <site name="lidar_360_s35" pos="-0.034867 0.003051 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.996195 -0.087156 0"/>
+        <site name="lidar_360_s36" pos="-0.035000 0.000000 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="1.000000 -0.000000 0"/>
+        <site name="lidar_360_s37" pos="-0.034867 -0.003051 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.996195 0.087156 0"/>
+        <site name="lidar_360_s38" pos="-0.034468 -0.006077 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.984807 0.173648 0"/>
+        <site name="lidar_360_s39" pos="-0.033807 -0.009059 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.965926 0.258819 0"/>
+        <site name="lidar_360_s40" pos="-0.032889 -0.011971 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.939693 0.342020 0"/>
+        <site name="lidar_360_s41" pos="-0.031721 -0.014792 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.906308 0.422618 0"/>
+        <site name="lidar_360_s42" pos="-0.030311 -0.017500 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.866025 0.500000 0"/>
+        <site name="lidar_360_s43" pos="-0.028670 -0.020075 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.819152 0.573576 0"/>
+        <site name="lidar_360_s44" pos="-0.026811 -0.022497 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.766044 0.642788 0"/>
+        <site name="lidar_360_s45" pos="-0.024749 -0.024749 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.707107 0.707107 0"/>
+        <site name="lidar_360_s46" pos="-0.022497 -0.026811 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.642788 0.766044 0"/>
+        <site name="lidar_360_s47" pos="-0.020075 -0.028670 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.573576 0.819152 0"/>
+        <site name="lidar_360_s48" pos="-0.017500 -0.030311 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.500000 0.866025 0"/>
+        <site name="lidar_360_s49" pos="-0.014792 -0.031721 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.422618 0.906308 0"/>
+        <site name="lidar_360_s50" pos="-0.011971 -0.032889 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.342020 0.939693 0"/>
+        <site name="lidar_360_s51" pos="-0.009059 -0.033807 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.258819 0.965926 0"/>
+        <site name="lidar_360_s52" pos="-0.006077 -0.034468 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.173648 0.984807 0"/>
+        <site name="lidar_360_s53" pos="-0.003051 -0.034867 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.087156 0.996195 0"/>
+        <site name="lidar_360_s54" pos="-0.000000 -0.035000 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="0.000000 1.000000 0"/>
+        <site name="lidar_360_s55" pos="0.003051 -0.034867 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.087156 0.996195 0"/>
+        <site name="lidar_360_s56" pos="0.006077 -0.034468 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.173648 0.984807 0"/>
+        <site name="lidar_360_s57" pos="0.009059 -0.033807 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.258819 0.965926 0"/>
+        <site name="lidar_360_s58" pos="0.011971 -0.032889 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.342020 0.939693 0"/>
+        <site name="lidar_360_s59" pos="0.014792 -0.031721 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.422618 0.906308 0"/>
+        <site name="lidar_360_s60" pos="0.017500 -0.030311 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.500000 0.866025 0"/>
+        <site name="lidar_360_s61" pos="0.020075 -0.028670 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.573576 0.819152 0"/>
+        <site name="lidar_360_s62" pos="0.022497 -0.026811 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.642788 0.766044 0"/>
+        <site name="lidar_360_s63" pos="0.024749 -0.024749 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.707107 0.707107 0"/>
+        <site name="lidar_360_s64" pos="0.026811 -0.022497 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.766044 0.642788 0"/>
+        <site name="lidar_360_s65" pos="0.028670 -0.020075 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.819152 0.573576 0"/>
+        <site name="lidar_360_s66" pos="0.030311 -0.017500 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.866025 0.500000 0"/>
+        <site name="lidar_360_s67" pos="0.031721 -0.014792 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.906308 0.422618 0"/>
+        <site name="lidar_360_s68" pos="0.032889 -0.011971 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.939693 0.342020 0"/>
+        <site name="lidar_360_s69" pos="0.033807 -0.009059 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.965926 0.258819 0"/>
+        <site name="lidar_360_s70" pos="0.034468 -0.006077 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.984807 0.173648 0"/>
+        <site name="lidar_360_s71" pos="0.034867 -0.003051 0" size="0.003" type="sphere" rgba="1 0 0 1" zaxis="-0.996195 0.087156 0"/>
       </body>
+
 
     </body>
   </worldbody>
@@ -136,42 +196,78 @@
     <jointpos name="front_right_wheel_pos" joint="front_right_wheel"/>
     
     <!-- 360-degree lidar rangefinders for each site -->
-    <rangefinder name="rf_360_s00" site="lidar_360_s00"/>
-    <rangefinder name="rf_360_s01" site="lidar_360_s01"/>
-    <rangefinder name="rf_360_s02" site="lidar_360_s02"/>
-    <rangefinder name="rf_360_s03" site="lidar_360_s03"/>
-    <rangefinder name="rf_360_s04" site="lidar_360_s04"/>
-    <rangefinder name="rf_360_s05" site="lidar_360_s05"/>
-    <rangefinder name="rf_360_s06" site="lidar_360_s06"/>
-    <rangefinder name="rf_360_s07" site="lidar_360_s07"/>
-    <rangefinder name="rf_360_s08" site="lidar_360_s08"/>
-    <rangefinder name="rf_360_s09" site="lidar_360_s09"/>
-    <rangefinder name="rf_360_s10" site="lidar_360_s10"/>
-    <rangefinder name="rf_360_s11" site="lidar_360_s11"/>
-    <rangefinder name="rf_360_s12" site="lidar_360_s12"/>
-    <rangefinder name="rf_360_s13" site="lidar_360_s13"/>
-    <rangefinder name="rf_360_s14" site="lidar_360_s14"/>
-    <rangefinder name="rf_360_s15" site="lidar_360_s15"/>
-    <rangefinder name="rf_360_s16" site="lidar_360_s16"/>
-    <rangefinder name="rf_360_s17" site="lidar_360_s17"/>
-    <rangefinder name="rf_360_s18" site="lidar_360_s18"/>
-    <rangefinder name="rf_360_s19" site="lidar_360_s19"/>
-    <rangefinder name="rf_360_s20" site="lidar_360_s20"/>
-    <rangefinder name="rf_360_s21" site="lidar_360_s21"/>
-    <rangefinder name="rf_360_s22" site="lidar_360_s22"/>
-    <rangefinder name="rf_360_s23" site="lidar_360_s23"/>
-    <rangefinder name="rf_360_s24" site="lidar_360_s24"/>
-    <rangefinder name="rf_360_s25" site="lidar_360_s25"/>
-    <rangefinder name="rf_360_s26" site="lidar_360_s26"/>
-    <rangefinder name="rf_360_s27" site="lidar_360_s27"/>
-    <rangefinder name="rf_360_s28" site="lidar_360_s28"/>
-    <rangefinder name="rf_360_s29" site="lidar_360_s29"/>
-    <rangefinder name="rf_360_s30" site="lidar_360_s30"/>
-    <rangefinder name="rf_360_s31" site="lidar_360_s31"/>
-    <rangefinder name="rf_360_s32" site="lidar_360_s32"/>
-    <rangefinder name="rf_360_s33" site="lidar_360_s33"/>
-    <rangefinder name="rf_360_s34" site="lidar_360_s34"/>
-    <rangefinder name="rf_360_s35" site="lidar_360_s35"/>
+    <rangefinder name="rf_360_s00" site="lidar_360_s00" cutoff="12"/>
+    <rangefinder name="rf_360_s01" site="lidar_360_s01" cutoff="12"/>
+    <rangefinder name="rf_360_s02" site="lidar_360_s02" cutoff="12"/>
+    <rangefinder name="rf_360_s03" site="lidar_360_s03" cutoff="12"/>
+    <rangefinder name="rf_360_s04" site="lidar_360_s04" cutoff="12"/>
+    <rangefinder name="rf_360_s05" site="lidar_360_s05" cutoff="12"/>
+    <rangefinder name="rf_360_s06" site="lidar_360_s06" cutoff="12"/>
+    <rangefinder name="rf_360_s07" site="lidar_360_s07" cutoff="12"/>
+    <rangefinder name="rf_360_s08" site="lidar_360_s08" cutoff="12"/>
+    <rangefinder name="rf_360_s09" site="lidar_360_s09" cutoff="12"/>
+    <rangefinder name="rf_360_s10" site="lidar_360_s10" cutoff="12"/>
+    <rangefinder name="rf_360_s11" site="lidar_360_s11" cutoff="12"/>
+    <rangefinder name="rf_360_s12" site="lidar_360_s12" cutoff="12"/>
+    <rangefinder name="rf_360_s13" site="lidar_360_s13" cutoff="12"/>
+    <rangefinder name="rf_360_s14" site="lidar_360_s14" cutoff="12"/>
+    <rangefinder name="rf_360_s15" site="lidar_360_s15" cutoff="12"/>
+    <rangefinder name="rf_360_s16" site="lidar_360_s16" cutoff="12"/>
+    <rangefinder name="rf_360_s17" site="lidar_360_s17" cutoff="12"/>
+    <rangefinder name="rf_360_s18" site="lidar_360_s18" cutoff="12"/>
+    <rangefinder name="rf_360_s19" site="lidar_360_s19" cutoff="12"/>
+    <rangefinder name="rf_360_s20" site="lidar_360_s20" cutoff="12"/>
+    <rangefinder name="rf_360_s21" site="lidar_360_s21" cutoff="12"/>
+    <rangefinder name="rf_360_s22" site="lidar_360_s22" cutoff="12"/>
+    <rangefinder name="rf_360_s23" site="lidar_360_s23" cutoff="12"/>
+    <rangefinder name="rf_360_s24" site="lidar_360_s24" cutoff="12"/>
+    <rangefinder name="rf_360_s25" site="lidar_360_s25" cutoff="12"/>
+    <rangefinder name="rf_360_s26" site="lidar_360_s26" cutoff="12"/>
+    <rangefinder name="rf_360_s27" site="lidar_360_s27" cutoff="12"/>
+    <rangefinder name="rf_360_s28" site="lidar_360_s28" cutoff="12"/>
+    <rangefinder name="rf_360_s29" site="lidar_360_s29" cutoff="12"/>
+    <rangefinder name="rf_360_s30" site="lidar_360_s30" cutoff="12"/>
+    <rangefinder name="rf_360_s31" site="lidar_360_s31" cutoff="12"/>
+    <rangefinder name="rf_360_s32" site="lidar_360_s32" cutoff="12"/>
+    <rangefinder name="rf_360_s33" site="lidar_360_s33" cutoff="12"/>
+    <rangefinder name="rf_360_s34" site="lidar_360_s34" cutoff="12"/>
+    <rangefinder name="rf_360_s35" site="lidar_360_s35" cutoff="12"/>
+    <rangefinder name="rf_360_s36" site="lidar_360_s36" cutoff="12"/>
+    <rangefinder name="rf_360_s37" site="lidar_360_s37" cutoff="12"/>
+    <rangefinder name="rf_360_s38" site="lidar_360_s38" cutoff="12"/>
+    <rangefinder name="rf_360_s39" site="lidar_360_s39" cutoff="12"/>
+    <rangefinder name="rf_360_s40" site="lidar_360_s40" cutoff="12"/>
+    <rangefinder name="rf_360_s41" site="lidar_360_s41" cutoff="12"/>
+    <rangefinder name="rf_360_s42" site="lidar_360_s42" cutoff="12"/>
+    <rangefinder name="rf_360_s43" site="lidar_360_s43" cutoff="12"/>
+    <rangefinder name="rf_360_s44" site="lidar_360_s44" cutoff="12"/>
+    <rangefinder name="rf_360_s45" site="lidar_360_s45" cutoff="12"/>
+    <rangefinder name="rf_360_s46" site="lidar_360_s46" cutoff="12"/>
+    <rangefinder name="rf_360_s47" site="lidar_360_s47" cutoff="12"/>
+    <rangefinder name="rf_360_s48" site="lidar_360_s48" cutoff="12"/>
+    <rangefinder name="rf_360_s49" site="lidar_360_s49" cutoff="12"/>
+    <rangefinder name="rf_360_s50" site="lidar_360_s50" cutoff="12"/>
+    <rangefinder name="rf_360_s51" site="lidar_360_s51" cutoff="12"/>
+    <rangefinder name="rf_360_s52" site="lidar_360_s52" cutoff="12"/>
+    <rangefinder name="rf_360_s53" site="lidar_360_s53" cutoff="12"/>
+    <rangefinder name="rf_360_s54" site="lidar_360_s54" cutoff="12"/>
+    <rangefinder name="rf_360_s55" site="lidar_360_s55" cutoff="12"/>
+    <rangefinder name="rf_360_s56" site="lidar_360_s56" cutoff="12"/>
+    <rangefinder name="rf_360_s57" site="lidar_360_s57" cutoff="12"/>
+    <rangefinder name="rf_360_s58" site="lidar_360_s58" cutoff="12"/>
+    <rangefinder name="rf_360_s59" site="lidar_360_s59" cutoff="12"/>
+    <rangefinder name="rf_360_s60" site="lidar_360_s60" cutoff="12"/>
+    <rangefinder name="rf_360_s61" site="lidar_360_s61" cutoff="12"/>
+    <rangefinder name="rf_360_s62" site="lidar_360_s62" cutoff="12"/>
+    <rangefinder name="rf_360_s63" site="lidar_360_s63" cutoff="12"/>
+    <rangefinder name="rf_360_s64" site="lidar_360_s64" cutoff="12"/>
+    <rangefinder name="rf_360_s65" site="lidar_360_s65" cutoff="12"/>
+    <rangefinder name="rf_360_s66" site="lidar_360_s66" cutoff="12"/>
+    <rangefinder name="rf_360_s67" site="lidar_360_s67" cutoff="12"/>
+    <rangefinder name="rf_360_s68" site="lidar_360_s68" cutoff="12"/>
+    <rangefinder name="rf_360_s69" site="lidar_360_s69" cutoff="12"/>
+    <rangefinder name="rf_360_s70" site="lidar_360_s70" cutoff="12"/>
+    <rangefinder name="rf_360_s71" site="lidar_360_s71" cutoff="12"/>
   </sensor>
   
   <!-- Removed equality coupling; left and right steering are controlled independently -->
