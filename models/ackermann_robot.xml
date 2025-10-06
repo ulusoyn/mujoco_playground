@@ -184,16 +184,20 @@
     </body>
   </worldbody>
   
+  <equality>
+    <!-- Couple left and right steering joints (1 servo for both) -->
+    <joint name="steer_coupling" joint1="front_left_steer" joint2="front_right_steer" polycoef="0 1"/>
+  </equality>
   <sensor>
-    <!-- Encoders for rear wheel rotation -->
-    <jointpos name="rear_left_encoder" joint="rear_left_wheel"/>
-    <jointpos name="rear_right_encoder" joint="rear_right_wheel"/>
-    
-    <!-- Optional: expose front steering angles and wheel spins too -->
-    <jointpos name="front_left_steer_angle" joint="front_left_steer"/>
-    <jointpos name="front_right_steer_angle" joint="front_right_steer"/>
-    <jointpos name="front_left_wheel_pos" joint="front_left_wheel"/>
-    <jointpos name="front_right_wheel_pos" joint="front_right_wheel"/>
+    <!-- Rear wheel encoders -->
+    <jointpos name="rear_left_pos" joint="rear_left_wheel"/>
+    <jointvel name="rear_left_vel" joint="rear_left_wheel"/>
+
+    <jointpos name="rear_right_pos" joint="rear_right_wheel"/>
+    <jointvel name="rear_right_vel" joint="rear_right_wheel"/>
+
+    <!-- Optional: steering angle (for debugging or control feedback) -->
+    <jointpos name="steering_angle" joint="front_left_steer"/>
     
     <!-- 360-degree lidar rangefinders for each site -->
     <rangefinder name="rf_360_s00" site="lidar_360_s00" cutoff="12"/>
@@ -273,17 +277,16 @@
   <!-- Removed equality coupling; left and right steering are controlled independently -->
 
   <actuator>
-    <!-- Steering actuators: position-controlled with limits -->
-    <position name="front_steer_left" joint="front_left_steer"
-              kp="30" kv="4" forcerange="-1 1"
-              ctrlrange="-0.61 0.61"/> <!-- match joint ±35° (0.611 rad) -->
+    <!-- Single steering actuator: controls both wheels via equality constraint -->
+    <position name="steering_servo"
+          joint="front_left_steer"
+          kp="40" kv="6"
+          ctrlrange="-0.61 0.61"
+          forcerange="-2 2"/>
 
-    <position name="front_steer_right" joint="front_right_steer"
-              kp="30" kv="4" forcerange="-1 1"
-              ctrlrange="-0.61 0.61"/> <!-- match joint ±35° (0.611 rad) -->
 
-    <!-- Rear wheel torque actuators -->
-    <velocity name="rear_left_drive" joint="rear_left_wheel" kv="1" ctrlrange="-50 50"/>
+    <!-- Rear wheel drive actuators (velocity-controlled) -->
+    <velocity name="rear_left_drive"  joint="rear_left_wheel"  kv="1" ctrlrange="-50 50"/>
     <velocity name="rear_right_drive" joint="rear_right_wheel" kv="1" ctrlrange="-50 50"/>
 
   </actuator>
