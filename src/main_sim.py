@@ -21,7 +21,7 @@ if str(src_dir) not in sys.path:
 
 try:
     from src.teleop.keyboard_teleop import MujocoTeleop
-    from src.core.controller import AckermannController
+    from src.core.controller import BicycleController
     print("Successfully imported modules!")
 except ImportError as e:
     print(f"Import error: {e}")
@@ -41,8 +41,7 @@ teleop = MujocoTeleop()
 
 # Here we pass teleop.key_callback → Mujoco will call it with keycodes automatically
 with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback) as viewer:
-    controller = AckermannController(model, data)
-
+    controller = BicycleController(model, data)
     # Prepare lidar sensor and site indices (72 beams)
     beam_count = 72
     rf_sensor_ids = []
@@ -83,7 +82,7 @@ with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback)
 
         # Print first 36 values for brevity
         first_addr = rf_sensor_addrs[0] if rf_sensor_addrs and rf_sensor_addrs[0] >= 0 else 0
-        lidar_values = data.sensordata[first_addr:first_addr + 36]
+        lidar_values = data.sensordata[first_addr:first_addr + 72]
         print("Lidar scan:", np.round(lidar_values, 2))
 
         # Draw lidar rays starting from each site

@@ -3,7 +3,7 @@ import time
 import glfw
 
 class MujocoTeleop:
-    def __init__(self, linear_increment=0.2, angular_increment=0.1,
+    def __init__(self, linear_increment=0.1, angular_increment=0.3,
                  linear_limit=1.0, angular_limit=2.0):
         self.cmd_vel = {"linear_x": 0.0, "angular_z": 0.0}
         self.linear_increment = linear_increment
