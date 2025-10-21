@@ -43,22 +43,28 @@ class AckermannController:
         v = float(linear_x)
         omega = float(angular_z)
 
-        if abs(omega) < 1e-6:
+        if abs(omega) < 1e-4:
             delta_left = delta_right = 0.0
             v_left = v_right = v
         else:
-            R = self.wheelbase / np.tan(np.clip(omega, -1.0, 1.0))
-            R_inner = max(abs(R) - self.track_width / 2.0, 1e-6)
-            R_outer = abs(R) + self.track_width / 2.0
+            # Calculate turn radius from linear and angular velocities
+            R = v / omega
+
+            # Calculate inner and outer wheel steering angles
+            R_inner = R - self.track_width / 2.0
+            R_outer = R + self.track_width / 2.0
+
+            # tan(delta) = wheelbase / R
             inner_angle = np.arctan(self.wheelbase / R_inner)
             outer_angle = np.arctan(self.wheelbase / R_outer)
-            if omega > 0:
-                delta_left, delta_right = inner_angle, outer_angle
-            else:
-                delta_left, delta_right = -outer_angle, -inner_angle
 
-            v_left = v * (R_inner / abs(R))
-            v_right = v * (R_outer / abs(R))
+            if omega > 0:  # Turning left
+                delta_left, delta_right = inner_angle, outer_angle
+            else:  # Turning right
+                delta_left, delta_right = outer_angle, inner_angle
+
+            v_left = omega * R_inner
+            v_right = omega * R_outer
 
         w_left = v_left / self.wheel_radius
         w_right = v_right / self.wheel_radius
@@ -84,6 +90,7 @@ class BicycleController:
         self.wheelbase = wheelbase
         self.track_width = track_width
 
+        # Single steering servo for bicycle model (real-world compatible)
         self.act_steer = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "steering_servo")
         self.act_rear_left = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "rear_left_drive")
         self.act_rear_right = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "rear_right_drive")
@@ -93,27 +100,35 @@ class BicycleController:
         omega = float(angular_z)
         eps = 1e-5
 
+        # Bicycle model: single steering angle
         if abs(omega) < 1e-6:
             delta = 0.0
         else:
+            # Calculate steering angle using bicycle model
             ratio = (self.wheelbase * omega) / (v if abs(v) > eps else np.sign(omega) * eps)
             delta = np.arctan(ratio)
 
+        # Clip steering angle to physical limits
         delta = np.clip(delta, -np.deg2rad(35), np.deg2rad(35))
 
+        # Calculate wheel velocities for differential drive
         if abs(delta) < 1e-6:
+            # Straight driving: both wheels same speed
             v_left = v_right = v
         else:
-            R = self.wheelbase / np.tan(delta)
-            R_inner = max(abs(R) - self.track_width / 2.0, 1e-6)
-            R_outer = abs(R) + self.track_width / 2.0
-            if delta > 0:
-                v_left = v * (R_inner / abs(R))
-                v_right = v * (R_outer / abs(R))
-            else:
-                v_left = v * (R_outer / abs(R))
-                v_right = v * (R_inner / abs(R))
+            # Turning: calculate differential wheel speeds
+            R = self.wheelbase / np.tan(delta) if abs(np.tan(delta)) > eps else float('inf')
+            R_inner = R - self.track_width / 2.0
+            R_outer = R + self.track_width / 2.0
+            
+            # Correctly calculate wheel velocities based on their turn radii
+            # v = omega * R  =>  omega = v / R
+            omega_turn = v / R if abs(R) > eps else 0.0
 
+            v_left = omega_turn * (R - self.track_width / 2.0)
+            v_right = omega_turn * (R + self.track_width / 2.0)
+
+        # Convert to angular velocities
         w_left = v_left / self.wheel_radius
         w_right = v_right / self.wheel_radius
         return delta, w_left, w_right

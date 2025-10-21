@@ -22,6 +22,7 @@ if str(src_dir) not in sys.path:
 try:
     from src.teleop.keyboard_teleop import MujocoTeleop
     from src.core.controller import BicycleController
+    from src.core.odometry import Odometry
     print("Successfully imported modules!")
 except ImportError as e:
     print(f"Import error: {e}")
@@ -42,6 +43,9 @@ teleop = MujocoTeleop()
 # Here we pass teleop.key_callback → Mujoco will call it with keycodes automatically
 with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback) as viewer:
     controller = BicycleController(model, data)
+    
+    # Initialize odometry tracker
+    odometry = Odometry(model, data, robot_body_name="chassis")
     # Prepare lidar sensor and site indices (72 beams)
     beam_count = 72
     rf_sensor_ids = []
@@ -83,18 +87,31 @@ with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback)
         # Print first 36 values for brevity
         first_addr = rf_sensor_addrs[0] if rf_sensor_addrs and rf_sensor_addrs[0] >= 0 else 0
         lidar_values = data.sensordata[first_addr:first_addr + 72]
+        # Safely read lidar data using individual sensor addresses
+        lidar_values = [
+            data.sensordata[addr] for addr in rf_sensor_addrs if addr >= 0
+        ]
         print("Lidar scan:", np.round(lidar_values, 2))
+        
+        # Get and print odometry data
+        odom_data = odometry.calculate_odom()
+        print(f"Odometry - Position: {np.round(odom_data['position'], 3)}, "
+              f"Heading: {np.round(odom_data['heading'], 3)}, "
+              f"Distance: {np.round(odom_data['distance'], 3)}")
 
         # Draw lidar rays starting from each site
         viewer.user_scn.ngeom = 0
         ray_width = 0.01
         max_len = 12.0
-        ray_rgba = np.array([0.1, 0.8, 0.1, 0.9])
+        ray_rgba = np.array([1.0, 1.0, 0.0, 0.9])  # Yellow rays for hits
         for addr, site_id in zip(rf_sensor_addrs, rf_site_ids):
             if addr < 0 or site_id < 0:
                 continue
             start = np.array(data.site_xpos[site_id])
             xmat = np.array(data.site_xmat[site_id]).reshape(3, 3)
+            # Use the z-axis of the site's rotation matrix as the ray direction
+            direction = xmat[:, 2]
+            # Use the -Z axis of the site's rotation matrix as the ray direction
             direction = -xmat[:, 2]
             distance = float(data.sensordata[addr])
             length = float(min(max_len, max(0.0, distance)))
