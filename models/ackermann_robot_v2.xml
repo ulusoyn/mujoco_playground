@@ -1,0 +1,126 @@
+<mujoco model="ackermann_robot">
+
+  <compiler angle="degree"/>
+
+  
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <asset>
+    <mesh name="Base" file="../CAD Models/Base.stl"/>
+  </asset>   
+  
+  <asset>
+    <mesh name="Ceiling" file="../CAD Models/Ceiling.stl"/>
+  </asset> 
+
+  
+  <worldbody>    
+
+    <light name="top" pos="0 0 3" dir="0 0 -1" diffuse=".6 .6 .6" specular="0.1 0.1 0.1"/>
+    <geom name="floor" pos="0 0 0" size="40 40 .1" type="plane" 
+      rgba="0.9 0.9 0.9 1" friction="1 0.005 0.0001" contype="1" conaffinity="7"/>
+    
+    <!-- Chassis box: length=0.275, width=0.15, height=0.1 -->
+    <!-- size uses half-dimensions -->
+    <body name="chassis" pos="0 0 0.065">
+        <freejoint/>
+
+        <body name="base">
+            <geom name="chassis" type="mesh" mesh="Base" euler="90 -90 0" pos="0 0 -0.03" mass="5"
+                conaffinity="1" contype="2" group="2" rgba="0.2 0.8 0.8 1"/>
+        </body>
+
+        <body name="ceiling">
+            <geom type="mesh" mesh="Ceiling" pos="0 0 -0.01" euler="90 -90 0"  mass="5"
+                conaffinity="1" contype="2" group="2" rgba="0.2 0.4 0.8 1"/>
+        </body>
+
+        <!-- Rear wheels (with encoders) at x=-0.12, y=±0.06, z=0.065; radius=0.065 -->
+        <body name="rear_left" pos="-0.10 0.087 -0.0325">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <geom name="rear_left_wheel_geom" type="cylinder" size="0.0325 0.01"
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
+            friction="1.4 0.08 0.0015"/>
+            <joint name="rear_left_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+        </body>
+        <body name="rear_right" pos="-0.10 -0.087 -0.0325">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <geom name="rear_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
+            friction="1.4 0.08 0.0015"/>
+            <joint name="rear_right_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+        </body>
+        
+        <!-- Front wheels with steering at x=+0.12, y=±0.06, z=0.065; radius=0.065 -->
+        <body name="front_left_steer" pos="0.10 0.087 -0.0325">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <!-- Steering hinge about Z (controlled) -->
+            <joint name="front_left_steer" type="hinge" axis="0 0 1" range="-35 35" damping="0.25" frictionloss="0.005"/>
+            <body name="front_left" pos="0 0 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <geom name="front_left_wheel_geom" type="cylinder" size="0.0325 0.01" 
+                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
+                friction="1.4 0.08 0.0015"/>
+            <!-- Wheel spin hinge about Y (free) -->
+            <joint name="front_left_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+            </body>
+        </body>
+        <body name="front_right_steer" pos="0.10 -0.087 -0.0325">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <!-- Steering hinge about Z (controlled) -->
+            <joint name="front_right_steer" type="hinge" axis="0 0 1" range="-35 35" damping="0.25" frictionloss="0.005"/>
+            <body name="front_right" pos="0 0 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
+            <geom name="front_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
+                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
+                friction="1.4 0.08 0.0015"/>
+            <!-- Wheel spin hinge about Y (free) -->
+            <joint name="front_right_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+            </body>
+        </body>
+        <!-- 360-degree lidar: 72 beams in a circle with 3mm radius, centered on robot -->
+        <body name="lidar_360" pos="0 0 0.03">
+            <replicate count="72" sep="-" euler="0 0 5">
+            <site name="rf" pos="0.035 0 0" size="0.003"
+                    euler="0 90 0" type="sphere" rgba="0 0 0 0"/>
+            </replicate>
+        </body>
+    </body>
+  </worldbody>
+  
+  <!-- Removed equality constraint for proper Ackermann steering -->
+  <sensor>
+    <!-- Rear wheel encoders -->
+    <jointpos name="rear_left_pos" joint="rear_left_wheel"/>
+    <jointvel name="rear_left_vel" joint="rear_left_wheel"/>
+
+    <jointpos name="rear_right_pos" joint="rear_right_wheel"/>
+    <jointvel name="rear_right_vel" joint="rear_right_wheel"/>
+
+    <!-- Optional: steering angle (for debugging or control feedback) -->
+    <jointpos name="steering_angle" joint="front_left_steer"/>
+
+    <rangefinder name="lidar" site="rf" cutoff="12"/>
+  </sensor>
+  
+  <equality>
+    <!-- Couple left and right steering joints (single servo controls both) -->
+    <joint name="steer_coupling" joint1="front_left_steer" joint2="front_right_steer" polycoef="0 1"/>
+  </equality>
+
+  <actuator>
+    <!-- Single steering servo for bicycle model (real-world compatible) -->
+    <position name="steering_servo"
+          joint="front_left_steer"
+          kp="40" kv="6"
+          ctrlrange="-0.61 0.61"
+          forcerange="-2 2"/>
+
+    <!-- Rear wheel drive actuators (velocity-controlled) -->
+    <velocity name="rear_left_drive"  joint="rear_left_wheel"  kv="1" ctrlrange="-50 50"/>
+    <velocity name="rear_right_drive" joint="rear_right_wheel" kv="1" ctrlrange="-50 50"/>
+
+  </actuator>
+
+
+</mujoco>

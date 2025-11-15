@@ -4,6 +4,11 @@
 mujoco>=3.0.0
 numpy>=1.20.0
 
+# RL dependencies
+gymnasium>=0.29.0             # Gymnasium API
+gymnasium-robotics>=2.0.0     # Gymnasium Robotics (for maze environments)
+stable-baselines3>=2.0.0      # RL algorithms (PPO, SAC, TD3)
+
 # Optional dependencies for teleoperation
 pygame>=2.1.0          # For joystick control
 keyboard>=0.13.5       # For keyboard control (requires root/admin on some systems)
