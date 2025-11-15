@@ -31,7 +31,7 @@ except ImportError as e:
 
 # Load model
 try:
-    model_path = project_root / "models" / "ackermann_robot.xml"
+    model_path = project_root / "models" / "ackermann_robot_v2.xml"
     model = mujoco.MjModel.from_xml_path(str(model_path))
     data = mujoco.MjData(model)
 except Exception as e:
@@ -52,8 +52,9 @@ with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback)
     rf_sensor_addrs = []
     rf_site_ids = []
     for i in range(beam_count):
-        sname = f"rf_360_s{i:02d}"
-        site_name = f"lidar_360_s{i:02d}"
+        # MuJoCo replicate with sep="-" creates names like "lidar-0", "lidar-1", etc.
+        sname = f"lidar-{i}"
+        site_name = f"rf-{i}"
         try:
             sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, sname)
             rf_sensor_ids.append(sid)
@@ -110,9 +111,8 @@ with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback)
             start = np.array(data.site_xpos[site_id])
             xmat = np.array(data.site_xmat[site_id]).reshape(3, 3)
             # Use the z-axis of the site's rotation matrix as the ray direction
+            # MuJoCo ray sensors measure along the site's local Z-axis.
             direction = xmat[:, 2]
-            # Use the -Z axis of the site's rotation matrix as the ray direction
-            direction = -xmat[:, 2]
             distance = float(data.sensordata[addr])
             length = float(min(max_len, max(0.0, distance)))
             end = start + direction * length
@@ -141,4 +141,3 @@ with mujoco.viewer.launch_passive(model, data, key_callback=teleop.key_callback)
 
         viewer.sync()
         time.sleep(max(0, model.opt.timestep - (time.time() - step_start)))
-
