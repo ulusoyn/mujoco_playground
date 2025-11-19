@@ -39,16 +39,16 @@
         <body name="rear_left" pos="-0.10 0.087 -0.0325">
             <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
             <geom name="rear_left_wheel_geom" type="cylinder" size="0.0325 0.01"
-            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
-            friction="1.4 0.08 0.0015"/>
-            <joint name="rear_left_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1" group="2"
+            friction="5.0 0.3 0.02"/>
+            <joint name="rear_left_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" range="-1000 1000"/>
         </body>
         <body name="rear_right" pos="-0.10 -0.087 -0.0325">
             <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
             <geom name="rear_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
-            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
-            friction="1.4 0.08 0.0015"/>
-            <joint name="rear_right_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" armature="0.002"/>
+            euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1" group="2"
+            friction="5.0 0.3 0.02"/>
+            <joint name="rear_right_wheel" type="hinge" axis="0 1 0" damping="0.15" frictionloss="0.02" range="-1000 1000"/>
         </body>
         
         <!-- Front wheels with steering at x=+0.12, y=±0.06, z=0.065; radius=0.065 -->
@@ -59,10 +59,10 @@
             <body name="front_left" pos="0 0 0">
             <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
             <geom name="front_left_wheel_geom" type="cylinder" size="0.0325 0.01" 
-                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
-                friction="1.4 0.08 0.0015"/>
+                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1" group="2"
+                friction="5.0 0.3 0.02"/>
             <!-- Wheel spin hinge about Y (free) -->
-            <joint name="front_left_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+            <joint name="front_left_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015" range="-1000 1000"/>
             </body>
         </body>
         <body name="front_right_steer" pos="0.10 -0.087 -0.0325">
@@ -72,17 +72,18 @@
             <body name="front_right" pos="0 0 0">
             <inertial pos="0 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
             <geom name="front_right_wheel_geom" type="cylinder" size="0.0325 0.01" 
-                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="4" conaffinity="1" group="2"
-                friction="1.4 0.08 0.0015"/>
+                euler="90 0 0" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1" group="2"
+                friction="5.0 0.3 0.02"/>
             <!-- Wheel spin hinge about Y (free) -->
-            <joint name="front_right_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015"/>
+            <joint name="front_right_wheel" type="hinge" axis="0 1 0" damping="0.12" frictionloss="0.012" armature="0.0015" range="-1000 1000"/>
             </body>
         </body>
         <!-- 360-degree lidar: 72 beams in a circle with 3mm radius, centered on robot -->
         <body name="lidar_360" pos="0 0 0.03">
             <replicate count="72" sep="-" euler="0 0 5">
             <site name="rf" pos="0.035 0 0" size="0.003"
-                    euler="0 90 0" type="sphere" rgba="0 0 0 0"/>
+                    euler="0 90 0" type="sphere" rgba="0 0 0 0"
+                    conaffinity="0" contype="0"/>
             </replicate>
         </body>
     </body>
